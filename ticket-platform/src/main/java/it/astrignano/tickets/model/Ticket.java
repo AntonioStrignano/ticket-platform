@@ -2,6 +2,8 @@ package it.astrignano.tickets.model;
 
 import java.util.List;
 
+import org.hibernate.annotations.ColumnDefault;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -14,6 +16,7 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 @Entity
 @Table(name="ticket")
@@ -35,12 +38,14 @@ public class Ticket {
 	
 	@ManyToOne
 	@JoinColumn(name="id_stato", nullable=false)
-	private Stato idStato;
+	@ColumnDefault("1")
+	private Stato stato;
 	
 	
 	@ManyToOne
+	@NotNull
 	@JoinColumn(name="id_utente")
-	private User idUtente;
+	private User utente;
 	
 	@ManyToMany()
 	@JoinTable(
@@ -52,5 +57,61 @@ public class Ticket {
 	
 	@OneToMany(mappedBy="ticket")
 	private List<Nota> note;
+
+	public Integer getId() {
+		return id;
+	}
+
+	public void setId(Integer id) {
+		this.id = id;
+	}
+
+	public String getTitolo() {
+		return titolo;
+	}
+
+	public void setTitolo(String titolo) {
+		this.titolo = titolo;
+	}
+
+	public String getDettaglio() {
+		return dettaglio;
+	}
+
+	public void setDettaglio(String dettaglio) {
+		this.dettaglio = dettaglio;
+	}
+
+	public Stato getIdStato() {
+		return stato;
+	}
+
+	public void setIdStato(Stato idStato) {
+		this.stato = idStato;
+	}
+
+	public User getIdUtente() {
+		return utente;
+	}
+
+	public void setIdUtente(User idUtente) {
+		this.utente = idUtente;
+	}
+
+	public List<Categoria> getCategorie() {
+		return categorie;
+	}
+
+	public void setCategorie(List<Categoria> categorie) {
+		this.categorie = categorie;
+	}
+
+	public List<Nota> getNote() {
+		return note;
+	}
+
+	public void setNote(List<Nota> note) {
+		this.note = note;
+	}
 
 }

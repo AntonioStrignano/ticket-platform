@@ -28,5 +28,35 @@ public class Categoria {
 	
 	@ManyToMany(mappedBy = "categorie")
 	private List<Ticket> tickets;
+
+
+	public Integer getId() {
+		return id;
+	}
+
+
+	public void setId(Integer id) {
+		this.id = id;
+	}
+
+
+	public String getNomeCategoria() {
+		return nomeCategoria;
+	}
+
+
+	public void setNomeCategoria(String nomeCategoria) {
+		this.nomeCategoria = nomeCategoria;
+	}
+
+
+	public List<Ticket> getTickets() {
+		return tickets;
+	}
+
+
+	public void setTickets(List<Ticket> tickets) {
+		this.tickets = tickets;
+	}
 	
 }

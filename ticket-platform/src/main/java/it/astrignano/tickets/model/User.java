@@ -5,17 +5,23 @@ import java.util.List;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToMany;
+import jakarta.persistence.OneToMany;
 import jakarta.validation.constraints.NotNull;
 
 @Entity
 public class User {
 
 	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name="id")
 	private Integer id;
 
 	@NotNull
+	@Column(unique=true)
 	private String username;
 	
 	@NotNull
@@ -26,6 +32,9 @@ public class User {
 
 	@Column(name="flag_attivo")
 	private Boolean isAttivo;
+	
+	@OneToMany(mappedBy="utente")
+	private List<Ticket> tickets;
 	
 	//GETTER E SETTER
 	public Integer getId() {

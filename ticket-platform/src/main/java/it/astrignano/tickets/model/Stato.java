@@ -12,7 +12,7 @@ import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
 
 @Entity
-@Table(name="statp")
+@Table(name="stato")
 public class Stato {
 	
 	@Id
@@ -26,5 +26,29 @@ public class Stato {
 	
 	@OneToMany(mappedBy = "idStato")
 	private List<Ticket> tickets;
+
+	public Integer getId() {
+		return id;
+	}
+
+	public void setId(Integer id) {
+		this.id = id;
+	}
+
+	public String getNomeStato() {
+		return nomeStato;
+	}
+
+	public void setNomeStato(String nomeStato) {
+		this.nomeStato = nomeStato;
+	}
+
+	public List<Ticket> getTickets() {
+		return tickets;
+	}
+
+	public void setTickets(List<Ticket> tickets) {
+		this.tickets = tickets;
+	}
 
 }
