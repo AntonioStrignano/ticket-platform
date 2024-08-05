@@ -29,7 +29,7 @@
 			<!-- utente -->
 			<label for="utente" class="form-label">Operatore assegnato</label>
 			<select th:field="*{utente}">
-				<option th:each="user : ${operatori}" th:value="${user.id}" th:text="${user.username}"></option>
+				<option th:each="user : ${operatori}" th:value="${user.id}" th:text="${user.username}" th:if="${user.getIsAttivo()}"></option>
 				<!--				th:if="${user.isAttivo}"-->
 			</select>
 			<br>

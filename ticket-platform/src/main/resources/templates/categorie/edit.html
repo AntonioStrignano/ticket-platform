@@ -2,23 +2,34 @@
 <html xmlns:th="http://www.thymeleaf.org" lang="en">
 
 <head>
-	<title>___BLANK___</title>
+	<title>Editor categoria</title>
 	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css"
 		integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 </head>
 
 <body>
-
 	<div class="container">
-	
+		<h1 th:text="|Modifica la seguente categoria: ${categoria.nomeCategoria}|"></h1>
+		<!-- FORM -->
+		<form th:object="${categoria}" method="post" id="form-nota"
+			th:action="@{|/categorie/${categoria.id}/edit|}">
+			<input type="hidden" th:field="*{id}" id="id">
+			<label for="nome-categoria" class="form-label">Nuovo nome categoria</label>
+			<input type="text" th:field="*{nomeCategoria}" class="form-control" id="nome-categoria">
+	<br>
+	<div th:if="${#fields.hasAnyErrors()}">
+		<ul>
+			<il th:each="err : ${#fields.allErrors}" th:text="${err}">
+
+			</il>
+		</ul>
 	</div>
+	<button type="submit" class="btn btn-primary mb-3">Salva</button>
 
+	</form>
 
-
-
-
-
+	</div>
 	<!-- SCRIPT BOOTSTRAP-->
 	<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
 		integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"

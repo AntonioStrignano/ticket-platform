@@ -13,35 +13,31 @@
 		<div th:unless=${editMode}>
 			<h1>Crea nuova nota</h1>
 			<h3 th:text="|Ticket id: ${ticketRef.id}|"></h3>
-			<h3 th:text="|Titolo: ${ticketRef.titolo}|"></h3>	
+			<h3 th:text="|Titolo: ${ticketRef.titolo}|"></h3>
 		</div>
-		<h1 th:if="${editMode}" th:text="|Modifica la seguente nota"></h1>
+		<h1 th:if="${editMode}" th:text="|Modifica la seguente nota|"></h1>
 		<!-- FORM -->
 		<form th:object="${nota}" method="post" id="form-nota"
 			th:action="${editMode} ? @{|/note/${nota.id}/edit|} : @{/note/create}">
-			<div th:unless="${editMode}">
-				<input type="hidden" th:field="*{id}" id="id">
-				<input type="hidden" th:field="*{ticket}" id="ticket" th:value="${ticketRef.id}">
-			</div>
-			<div th:if="${editMode}">
-				<input type="hidden" th:field="*{id}" id="id">
-				<input type="hidden" th:field="*{ticket}" id="id_ticket">
-			</div>
-			<!-- da mettere l'user con l'auth -->
+			<input type="hidden" th:field="*{id}" id="id-nota">
+			<input type="hidden" th:field="*{ticket}" id="id_ticket">
+			<input type="hidden" th:field="*{utente}" id="utente">
 
-			<textarea th:field="*{corpo}" id="corpo-nota" rows="2" class="form-control"></textarea>
+	<!-- da mettere l'user con l'auth -->
 
-			<br>
-			<div th:if="${#fields.hasAnyErrors()}">
-				<ul>
-					<il th:each="err : ${#fields.allErrors}" th:text="${err}">
+	<textarea th:field="*{corpo}" id="corpo-nota" rows="2" class="form-control"></textarea>
 
-					</il>
-				</ul>
-			</div>
-			<button type="submit" class="btn btn-primary mb-3">Salva</button>
+	<br>
+	<div th:if="${#fields.hasAnyErrors()}">
+		<ul>
+			<il th:each="err : ${#fields.allErrors}" th:text="${err}">
 
-		</form>
+			</il>
+		</ul>
+	</div>
+	<button type="submit" class="btn btn-primary mb-3">Salva</button>
+
+	</form>
 
 	</div>
 	<!-- SCRIPT BOOTSTRAP-->

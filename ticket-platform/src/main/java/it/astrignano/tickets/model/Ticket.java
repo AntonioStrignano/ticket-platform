@@ -1,4 +1,4 @@
-package it.astrignano.tickets.model;
+ package it.astrignano.tickets.model;
 
 import java.util.List;
 
@@ -39,7 +39,7 @@ public class Ticket {
 	
 	
 	@ManyToOne
-	@JoinColumn(name="id_stato", columnDefinition="integer default 1")
+	@JoinColumn(name="id_stato")
 	private Stato stato;
 	
 	

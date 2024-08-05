@@ -39,18 +39,33 @@
 				<li th:each="categ:${ticket.getCategorie}" th:text="${categ.nomeCategoria}"></li>
 			</ul>
 		</div>
-
+		<!-- NOTE -->
 		<div>
 			<h4>Note:</h4>
 			<p th:if="${ticket.getNote.isEmpty()}">Non ci sono note su questo ticket.</p>
-			<a th:href="@|{/tickets/${ticket.id}/aggiungi-nota}" class="btn btn-primary">Aggiungi nota</a>
+			<a th:href="@{|/tickets/${ticket.id}/aggiungi-nota|}" class="btn btn-primary">Aggiungi nota</a>
 			<ul>
-				<li th:each="nota:${ticket.getNote}" th:text="|${nota.corpo}"></li>
+				<li th:each="nota:${ticket.getNote}">
+					<div style="border: solid 1px;">
+						<p th:text="|Utente: ${nota.utente.username}|"></p>
+						<p th:text="|Data aggiunta: ${nota.dataCreazione}|"></p>
+						<p th:text='|"${nota.corpo}"|'></p>
+						<a class="btn btn-primary" th:href="@{|/note/${nota.id}/edit|}">Modifica</a>
+						<form method="post" id="delete-nota" th:action="@{|/note/${nota.id}/delete|}">
+							<button class="btn btn-danger" type="submit" id="submitButton"
+								th:data-confirm-delete="|Sei sicuro di voler cancellare la nota?|"
+								th:onclick="if(!confirm(this.getAttribute('data-confirm-delete'))) return false">
+								Elimina
+							</button>
+						</form>
+
+					</div>
+				</li>
 			</ul>
 		</div>
 
 		<!-- RICORDATI DI TOGLIERLO -->
-		<a class="btn btn-primary" th:href="|/tickets/${ticket.id}/edit|">modifica</a>
+		<a class="btn btn-primary" th:href="@{|/tickets/${ticket.id}/edit|}">modifica</a>
 
 		<form th:action="@{|/tickets/${ticket.id}/delete|}" method="post">
 			<button class="btn btn-danger" type="submit" id="submitButton"
@@ -58,7 +73,8 @@
 				th:onclick="if(!confirm(this.getAttribute('data-confirm-delete'))) return false">
 				Elimina
 			</button>
-
+		
+			<a class="btn btn-primary" th:href="@{|/user/${ticket.utente.getId()}|}">Vai alla dashboard</a>
 			<a class="btn btn-primary" href="/tickets">Debug</a>
 
 

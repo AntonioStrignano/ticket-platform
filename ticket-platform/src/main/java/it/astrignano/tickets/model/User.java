@@ -10,9 +10,11 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 
 @Entity
+@Table(name="user")
 public class User {
 
 	@Id
@@ -67,6 +69,22 @@ public class User {
 
 	public void setRoles(List<Role> roles) {
 		this.roles = roles;
+	}
+
+	public Boolean getIsAttivo() {
+		return isAttivo;
+	}
+
+	public void setIsAttivo(Boolean isAttivo) {
+		this.isAttivo = isAttivo;
+	}
+
+	public List<Ticket> getTickets() {
+		return tickets;
+	}
+
+	public void setTickets(List<Ticket> tickets) {
+		this.tickets = tickets;
 	}
 
 	

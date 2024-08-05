@@ -45,10 +45,13 @@ public class TicketController {
 	}
 
 //----CREATE----
-	@GetMapping("/new")
+	@GetMapping("/create")
 	public String newTicket(Model model) {
+		
+		Ticket newTicket = new Ticket();
+		newTicket.setStato(statoRepo.getReferenceById(1));
 
-		model.addAttribute("ticket", new Ticket());
+		model.addAttribute("ticket", newTicket);
 		model.addAttribute("operatori", userRepo.findAll());
 		model.addAttribute("categorie", cateRepo.findAll());
 
@@ -136,7 +139,10 @@ public class TicketController {
 		Ticket ticketRef = ticketRepo.getReferenceById(ticketId);
 		Nota newNota = new Nota();
 		newNota.setTicket(ticketRef);
+		// DA ELIMINARE-PROVVISORIO
+		newNota.setUtente(userRepo.getReferenceById(1));
 		
+		model.addAttribute("ticketRef", ticketRef);
 		model.addAttribute("nota", newNota);
 
 		return "/note/edit";

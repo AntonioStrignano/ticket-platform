@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import it.astrignano.tickets.model.Nota;
 import it.astrignano.tickets.model.Ticket;
 import it.astrignano.tickets.repository.NoteRepository;
+import it.astrignano.tickets.repository.TicketRepository;
 import jakarta.validation.Valid;
 
 @Controller
@@ -21,11 +22,15 @@ public class NoteController {
 
 	@Autowired
 	private NoteRepository noteRepo;
+	
+	@Autowired
+	private TicketRepository ticketRepo;
 
 //-----	CREATE
 
 	@PostMapping("/create")
-	public String createNota(@Valid @ModelAttribute("nota") Nota newNota, @ModelAttribute("ticketRef") Ticket ticketRef, BindingResult bindingResult) {
+	public String createNota(@Valid @ModelAttribute("nota") Nota newNota, @ModelAttribute("ticketRef") Ticket ticketRef,
+			BindingResult bindingResult) {
 
 		if (bindingResult.hasErrors()) {
 			return "/note/edit";
@@ -43,7 +48,7 @@ public class NoteController {
 		model.addAttribute("nota", noteRepo.getReferenceById(id));
 		model.addAttribute("editMode", true);
 
-		return "/nota/edit";
+		return "/note/edit";
 	}
 
 	@PostMapping("/{id}/edit")
@@ -55,21 +60,18 @@ public class NoteController {
 
 		noteRepo.save(nota);
 
-		return "redirect:/";
+		return "redirect:/tickets/" + nota.getTicket().getId();
 	}
 
 //----- DELETE
 
 	@PostMapping("/{id}/delete")
-	public String notaDel(@PathVariable("id") Integer id, BindingResult bindingResult) {
+	public String notaDel(@PathVariable("id") Integer id) {
 
-		if (bindingResult.hasErrors()) {
-			return "/";
-		}
-
+		Ticket ticketRef = noteRepo.getReferenceById(id).getTicket();
 		noteRepo.deleteById(id);
 
-		return "redirect:/";
+		return "redirect:/tickets/" + ticketRef.getId();
 	}
 
 }

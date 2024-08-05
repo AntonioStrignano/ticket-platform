@@ -24,9 +24,7 @@ public class Nota {
 	private Integer id;
 	
 	@ManyToOne
-	@JoinColumn(name="id_utente"
-	//PROVVISORIO
-			, columnDefinition="integer default 1")
+	@JoinColumn(name="id_utente")
 	private User utente;
 	
 	@ManyToOne
