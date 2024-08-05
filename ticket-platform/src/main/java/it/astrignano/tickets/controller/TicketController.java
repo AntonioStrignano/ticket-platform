@@ -1,5 +1,8 @@
 package it.astrignano.tickets.controller;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -13,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import it.astrignano.tickets.model.Nota;
 import it.astrignano.tickets.model.Ticket;
 import it.astrignano.tickets.repository.CategorieRepository;
+import it.astrignano.tickets.repository.NoteRepository;
 import it.astrignano.tickets.repository.StatoRepository;
 import it.astrignano.tickets.repository.TicketRepository;
 import it.astrignano.tickets.repository.UserRepository;
@@ -33,6 +37,9 @@ public class TicketController {
 
 	@Autowired
 	private StatoRepository statoRepo;
+	
+	@Autowired
+	private NoteRepository noteRepo;
 
 //-----READ-----
 	@GetMapping("/{id}")
@@ -108,9 +115,16 @@ public class TicketController {
 //----DELETE-----
 
 	@PostMapping("/{id}/delete")
-	public String deleteTicket(@PathVariable("id") Integer id) {
+	public String deleteTicket(@PathVariable("id") Integer idTicket) {
 
-		ticketRepo.deleteById(id);
+		
+		for(Nota nota:noteRepo.findAll()) {
+			if(nota.getTicket().getId() == idTicket) {
+				noteRepo.deleteById(nota.getId());
+			}
+		}
+
+		ticketRepo.deleteById(idTicket);
 
 		return "redirect:/tickets";
 	}

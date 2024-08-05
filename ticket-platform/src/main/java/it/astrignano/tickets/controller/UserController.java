@@ -96,7 +96,8 @@ public String userEdit(Model model, @PathVariable("id") Integer id) {
 	
 	Boolean editMode = true;
 	User user = userRepo.getReferenceById(id);
-	user.setPassword(user.getPassword().substring(6));
+//	user.setPassword(user.getPassword().substring(6));
+	user.setPassword(null);
 	model.addAttribute("user", user);
 	model.addAttribute("editMode", editMode);
 	
