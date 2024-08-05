@@ -91,15 +91,28 @@ public class UserController {
 	
 //-----	UPDATE
 
+@GetMapping("/{id}/update")
+public String userEdit(Model model, @PathVariable("id") Integer id) {
+	
+	Boolean editMode = true;
+	User user = userRepo.getReferenceById(id);
+	user.setPassword(user.getPassword().substring(6));
+	model.addAttribute("user", user);
+	model.addAttribute("editMode", editMode);
+	
+	return"/user/edit";
+}
 
 	
 	@PostMapping("/{id}/update")
 	public String userUpdate(@PathVariable("id") Integer id, @Valid @ModelAttribute("user") User user,
 			BindingResult bindingResult) {
 
+
+		user.setPassword("{noop}" + user.getPassword());
 		
 		if (bindingResult.hasErrors()) {
-			return "/user/dashboard";
+			return "/user/edit";
 		}
 
 		userRepo.save(user);
