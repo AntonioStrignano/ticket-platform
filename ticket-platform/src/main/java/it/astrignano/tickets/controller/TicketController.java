@@ -30,7 +30,7 @@ public class TicketController {
 
 	@Autowired
 	private CategorieRepository cateRepo;
-	
+
 	@Autowired
 	private StatoRepository statoRepo;
 
@@ -67,10 +67,12 @@ public class TicketController {
 		if (bindingResult.hasErrors()) {
 			return "/ticket/edit";
 		}
+		newTicket.setStato(statoRepo.getReferenceById(1));
 		ticketRepo.save(newTicket);
 
-		//---------
-		return "redirect:/";
+		// ---------
+		return "redirect:/tickets/" + newTicket.getId();
+
 	}
 
 //-----UPDATE----
@@ -81,6 +83,8 @@ public class TicketController {
 		model.addAttribute("ticket", ticketRepo.getReferenceById(id));
 		model.addAttribute("operatori", userRepo.findAll());
 		model.addAttribute("categorie", cateRepo.findAll());
+		model.addAttribute("stati", statoRepo.findAll());
+		model.addAttribute("editMode", true);
 
 		return "/ticket/edit";
 	}
@@ -94,50 +98,51 @@ public class TicketController {
 		}
 		ticketRepo.save(upTicket);
 
-		//---------
-		return "redirect:/";
+		// ---------
+		return "redirect:/tickets/" + upTicket.getId();
 	}
 
 //----DELETE-----
 
 	@PostMapping("/{id}/delete")
-	public String deleteTicket(@PathVariable ("id") Integer id) {
-		
+	public String deleteTicket(@PathVariable("id") Integer id) {
+
 		ticketRepo.deleteById(id);
-		
-		return"redirect:/";
+
+		return "redirect:/tickets/blank";
 	}
-	
-	
-	
+
 //------UPDATE STATO del ticket
-	
+
 	@PostMapping("/{id}/stato")
 	public String updateStato(@Valid @ModelAttribute("ticket") Ticket statoTicket, @PathVariable("id") Integer id,
 			BindingResult bindingResult) {
-		
+
 		if (bindingResult.hasErrors()) {
 			return "/ticket/show";
 		}
 		ticketRepo.save(statoTicket);
 
-		//---------
-		return "redirect:/";
-	
+		// ---------
+		return "redirect:/tickets/" + statoTicket.getId();
+
 	}
-	
-	
+
 //-------AGGIUNGI NOTA
-	
+
 	@GetMapping("/{id}/aggiungi-nota")
-	public String addNota(@PathVariable ("id") Integer ticketId, Model model) {
-		
+	public String addNota(@PathVariable("id") Integer ticketId, Model model) {
+
 		model.addAttribute("nota", new Nota());
 		model.addAttribute("ticketRef", ticketRepo.getReferenceById(ticketId));
-		
+
 		return "/nota/edit";
 	}
-	
-//-----	ADMIN DASHBOARD
-	
+
+//----- get debug
+	@GetMapping("/blank")
+	public String debug() {
+		return "/blank";
+	}
+
 }

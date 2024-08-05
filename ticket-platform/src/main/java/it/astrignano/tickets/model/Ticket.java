@@ -3,7 +3,9 @@ package it.astrignano.tickets.model;
 import java.util.List;
 
 import org.hibernate.annotations.ColumnDefault;
+import org.springframework.beans.factory.annotation.Autowired;
 
+import it.astrignano.tickets.repository.StatoRepository;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -31,14 +33,13 @@ public class Ticket {
 	@Column(name="titolo", nullable=false)
 	private String titolo;
 	
-	@NotBlank(message="Il titolo del ticket è obbligatorio.")	
+	@NotBlank(message="Il dettaglio del ticket è obbligatorio.")	
 	@Column(name="dettaglio", nullable=false)
 	private String dettaglio;
 	
 	
 	@ManyToOne
-	@JoinColumn(name="id_stato", nullable=false)
-	@ColumnDefault("1")
+	@JoinColumn(name="id_stato", columnDefinition="integer default 1")
 	private Stato stato;
 	
 	
@@ -57,7 +58,8 @@ public class Ticket {
 	
 	@OneToMany(mappedBy="ticket")
 	private List<Nota> note;
-
+	
+	
 	public Integer getId() {
 		return id;
 	}
@@ -82,19 +84,19 @@ public class Ticket {
 		this.dettaglio = dettaglio;
 	}
 
-	public Stato getIdStato() {
+	public Stato getStato() {
 		return stato;
 	}
 
-	public void setIdStato(Stato idStato) {
+	public void setStato(Stato idStato) {
 		this.stato = idStato;
 	}
 
-	public User getIdUtente() {
+	public User getUtente() {
 		return utente;
 	}
 
-	public void setIdUtente(User idUtente) {
+	public void setUtente(User idUtente) {
 		this.utente = idUtente;
 	}
 

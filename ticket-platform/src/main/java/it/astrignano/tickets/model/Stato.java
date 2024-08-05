@@ -24,7 +24,7 @@ public class Stato {
 	@Column(name="nome_stato", nullable = false)
 	private String nomeStato;
 	
-	@OneToMany(mappedBy = "idStato")
+	@OneToMany(mappedBy = "stato")
 	private List<Ticket> tickets;
 
 	public Integer getId() {

@@ -1,0 +1,77 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+
+<head>
+	<title>Editor ticket</title>
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css"
+		integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+</head>
+
+<body>
+	<div class="container">
+		<h1 th:unless=${editMode} th:text="|Crea nuovo ticket|"></h1>
+		<h1 th:if="${editMode}" th:text="|Modifica il ticket: ${ticket.titolo}"></h1>
+		<!-- FORM -->
+		<form th:object="${ticket}" method="post" id="form-ticket"
+			th:action="${editMode} ? @{|/tickets/${ticket.id}/update|} : @{/tickets/create}">
+			<input type="hidden" th:field="*{id}" id="id">
+
+			<!-- titolo-->
+			<label for="titolo" class="form-label">Titolo ticket</label>
+			<input type="text" th:field="*{titolo}" placeholder="Titolo ticket" id="titolo-ticket" class="form-control">
+
+
+			<!-- dettaglio -->
+			<label for="dettaglio" class="form-label">Dettaglio ticket</label>
+			<textarea class="form-control" id="dettaglio" rows="3" th:field="*{dettaglio}"></textarea>
+			<br>
+			<!-- utente -->
+			<label for="utente" class="form-label">Operatore assegnato</label>
+			<select th:field="*{utente}">
+				<option th:each="user : ${operatori}" th:value="${user.id}" th:text="${user.username}"></option>
+				<!--				th:if="${user.isAttivo}"-->
+			</select>
+			<br>
+			<!-- categorie -->
+			<label for="categorie" class="form-label">Categorie ticket</label>
+			<th:block th:each="categ:${categorie}">
+				<input type="checkbox" name="categoria" th:value="${categ.id}" th:field="*{categorie}">
+				<label th:text="${categ.nomeCategoria}"></label>
+			</th:block>
+			<br>
+
+			<!-- stati -->
+			<div th:if="${editMode}">
+				<label for="stato" class="form-label">Stato:</label>
+				<select th:field="*{stato}">
+					<option th:each="stato : ${stati}" th:value="${stato.id}" th:text="${stato.nomeStato}"></option>
+				</select>
+			</div>
+
+			<br>
+			<div th:if="${#fields.hasAnyErrors()}">
+				<ul>
+					<il th:each="err : ${#fields.allErrors}" th:text="${err}">
+
+					</il>
+				</ul>
+			</div>
+			<button type="submit" class="btn btn-primary mb-3">Salva</button>
+
+		</form>
+
+	</div>
+	<!-- SCRIPT BOOTSTRAP-->
+	<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+		integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+		crossorigin="anonymous"></script>
+	<script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.7/dist/umd/popper.min.js"
+		integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+		crossorigin="anonymous"></script>
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.min.js"
+		integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+		crossorigin="anonymous"></script>
+</body>
+
+</html>
