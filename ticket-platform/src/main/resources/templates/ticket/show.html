@@ -43,6 +43,7 @@
 		<div>
 			<h4>Note:</h4>
 			<p th:if="${ticket.getNote.isEmpty()}">Non ci sono note su questo ticket.</p>
+			<a th:href="@|{/tickets/${ticket.id}/aggiungi-nota}" class="btn btn-primary">Aggiungi nota</a>
 			<ul>
 				<li th:each="nota:${ticket.getNote}" th:text="|${nota.corpo}"></li>
 			</ul>
@@ -58,7 +59,7 @@
 				Elimina
 			</button>
 
-			<a class="btn btn-primary" href="/tickets/blank">Debug</a>
+			<a class="btn btn-primary" href="/tickets">Debug</a>
 
 
 

@@ -24,7 +24,9 @@ public class Nota {
 	private Integer id;
 	
 	@ManyToOne
-	@JoinColumn(name="id_utente")
+	@JoinColumn(name="id_utente"
+	//PROVVISORIO
+			, columnDefinition="integer default 1")
 	private User utente;
 	
 	@ManyToOne
@@ -32,7 +34,7 @@ public class Nota {
 	private Ticket ticket;
 
 	@Column(name="data_creazione")
-	private LocalDateTime dataCreazione;
+	private LocalDateTime dataCreazione = LocalDateTime.now();
 	
 	@NotBlank(message="Inserisci un testo nel corpo della nota.")
 	@Column(name="corpo_nota")

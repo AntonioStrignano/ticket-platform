@@ -24,18 +24,16 @@ public class NoteController {
 
 //-----	CREATE
 
-	@PostMapping("/new")
-	public String createNota(@Valid @ModelAttribute("nota") Nota newNota, @ModelAttribute("ticketRef") Ticket ticketRef,
-			BindingResult bindingResult) {
+	@PostMapping("/create")
+	public String createNota(@Valid @ModelAttribute("nota") Nota newNota, @ModelAttribute("ticketRef") Ticket ticketRef, BindingResult bindingResult) {
 
 		if (bindingResult.hasErrors()) {
-			return "/ticket/add-nota";
+			return "/note/edit";
 		}
 
-		newNota.setTicket(ticketRef);
 		noteRepo.save(newNota);
 
-		return "redirect:/";
+		return "redirect:/tickets/" + newNota.getTicket().getId();
 	}
 
 //----- UPDATE
@@ -43,6 +41,7 @@ public class NoteController {
 	public String editNota(@PathVariable("id") Integer id, Model model) {
 
 		model.addAttribute("nota", noteRepo.getReferenceById(id));
+		model.addAttribute("editMode", true);
 
 		return "/nota/edit";
 	}
@@ -62,14 +61,14 @@ public class NoteController {
 //----- DELETE
 
 	@PostMapping("/{id}/delete")
-	public String notaDel(@PathVariable ("id") Integer id, BindingResult bindingResult) {
-		
+	public String notaDel(@PathVariable("id") Integer id, BindingResult bindingResult) {
+
 		if (bindingResult.hasErrors()) {
 			return "/";
 		}
-		
+
 		noteRepo.deleteById(id);
-		
+
 		return "redirect:/";
 	}
 

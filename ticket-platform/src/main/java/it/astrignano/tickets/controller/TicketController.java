@@ -109,7 +109,7 @@ public class TicketController {
 
 		ticketRepo.deleteById(id);
 
-		return "redirect:/tickets/blank";
+		return "redirect:/tickets";
 	}
 
 //------UPDATE STATO del ticket
@@ -133,16 +133,19 @@ public class TicketController {
 	@GetMapping("/{id}/aggiungi-nota")
 	public String addNota(@PathVariable("id") Integer ticketId, Model model) {
 
-		model.addAttribute("nota", new Nota());
-		model.addAttribute("ticketRef", ticketRepo.getReferenceById(ticketId));
+		Ticket ticketRef = ticketRepo.getReferenceById(ticketId);
+		Nota newNota = new Nota();
+		newNota.setTicket(ticketRef);
+		
+		model.addAttribute("nota", newNota);
 
-		return "/nota/edit";
+		return "/note/edit";
 	}
 
 //----- get debug
-	@GetMapping("/blank")
+	@GetMapping("")
 	public String debug() {
-		return "/blank";
+		return "/debug";
 	}
 
 }
