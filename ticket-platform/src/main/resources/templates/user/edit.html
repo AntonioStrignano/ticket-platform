@@ -9,12 +9,16 @@
 </head>
 
 <body>
+	
+		
+		
+	</div>
 	<div class="container">
 		<h1 th:unless=${editMode} th:text="|Crea nuovo utente|"></h1>
 		<h1 th:if="${editMode}" th:text="|Modifica utente: ${user.username}"></h1>
 		<!-- FORM -->
 		<form th:object="${user}" method="post" id="form-ticket"
-			th:action="${editMode} ? @{|/user/${user.id}/update|} : @{/user/create}">
+			th:action="${editMode} ? @{|/user/update/${user.id}|} : @{/user/create}">
 
 			<input type="hidden" th:field="*{id}" id="id">
 			<!-- username -->
@@ -25,18 +29,19 @@
 			<!-- password -->
 			<label for="password" class="form-label">Nuova password</label>
 			<input type="text" class="form-control" id="password" th:field="*{password}"></input>
-			
+
 			<!-- ruolo -->
 			<label for="ruoli" class="form-label">Ruoli</label>
-						<th:block th:each="ruolo:${ruoli}">
-							<input type="checkbox" name="ruolo" th:value="${ruolo.getId}" th:field="*{roles}">
-							<label th:text="${ruolo.getName()}"></label>
-						</th:block>
-			
-			
+			<th:block th:each="ruolo:${ruoli}">
+				<input type="checkbox" name="ruolo" th:value="${ruolo.getId}" th:field="*{roles}">
+				<label th:text="${ruolo.getName()}"></label>
+			</th:block>
+
+
 			<div th:if="${#fields.hasAnyErrors()}">
-				<ul>
-					<il th:each="err : ${#fields.allErrors}" th:text="${err}">
+				<ul class="list-group">
+					<il th:each="err : ${#fields.allErrors}" th:text="${err}"
+						class="alert alert-primary list-group-item">
 
 					</il>
 				</ul>

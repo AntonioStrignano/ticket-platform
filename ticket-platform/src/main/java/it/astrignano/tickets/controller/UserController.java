@@ -2,13 +2,17 @@ package it.astrignano.tickets.controller;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import it.astrignano.tickets.model.Role;
 import it.astrignano.tickets.model.Ticket;
 import it.astrignano.tickets.model.User;
 import it.astrignano.tickets.repository.RoleRepository;
@@ -32,9 +36,22 @@ public class UserController {
 
 //---- READ
 	@GetMapping("/{id}")
-	public String userDashboard(@PathVariable("id") Integer id, Model model) {
+	public String userDashboard(@PathVariable("id") Integer id, Model model, @AuthenticationPrincipal UserDetails currentUser) {
 
 		User user = userRepo.getReferenceById(id);
+		
+		User provUser = new User();
+		for(User utente:userRepo.findAll()) {
+			if(utente.getUsername().equals(currentUser.getUsername())) {
+				provUser = utente;
+				break;
+			}
+		}
+		if(!provUser.getRoles().contains(roleRepo.getReferenceById(1))) {
+		if(!currentUser.getUsername().equals(user.getUsername())) {
+			return"/error";
+		}
+		}
 		model.addAttribute("user", user);
 		
 		// validazione modifica stato
@@ -65,8 +82,12 @@ public class UserController {
 	}
 
 	@PostMapping("/create")
-	public String userStore(@Valid @ModelAttribute("user") User user, BindingResult bindingResult) {
+	public String userStore(@Valid @ModelAttribute("user") User user, BindingResult bindingResult, Model model) {
 
+
+		model.addAttribute("ruoli", roleRepo.findAll());
+
+		
 		if (bindingResult.hasErrors()) {
 			return "/user/edit";
 		}
@@ -91,7 +112,7 @@ public class UserController {
 	
 //-----	UPDATE
 
-@GetMapping("/{id}/update")
+@GetMapping("/update/{id}")
 public String userEdit(Model model, @PathVariable("id") Integer id) {
 	
 	Boolean editMode = true;
@@ -105,7 +126,7 @@ public String userEdit(Model model, @PathVariable("id") Integer id) {
 }
 
 	
-	@PostMapping("/{id}/update")
+	@PostMapping("/update/{id}")
 	public String userUpdate(@PathVariable("id") Integer id, @Valid @ModelAttribute("user") User user,
 			BindingResult bindingResult) {
 

@@ -2,45 +2,21 @@
 <html xmlns:th="http://www.thymeleaf.org" lang="en">
 
 <head>
-	<title>Editor nota</title>
+	<title>Landing page</title>
 	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css"
 		integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 </head>
 
 <body>
+
 	<div class="container">
-		<div th:unless=${editMode}>
-			<h1>Crea nuova nota</h1>
-			<h3 th:text="|Ticket id: ${ticketRef.id}|"></h3>
-			<h3 th:text="|Titolo: ${ticketRef.titolo}|"></h3>
-		</div>
-		<h1 th:if="${editMode}" th:text="|Modifica la seguente nota|"></h1>
-		<!-- FORM -->
-		<form th:object="${nota}" method="post" id="form-nota"
-			th:action="${editMode} ? @{|/note/edit/${nota.id}|} : @{/note/create}">
-			<input type="hidden" th:field="*{id}" id="id-nota">
-			<input type="hidden" th:field="*{ticket}" id="id_ticket">
-			<input type="hidden" th:field="*{utente}" id="utente">
-
-			<!-- da mettere l'user con l'auth -->
-
-			<textarea th:field="*{corpo}" id="corpo-nota" rows="2" class="form-control"></textarea>
-
-			<br>
-
-			<div th:if="${#fields.hasAnyErrors()}">
-				<ul class="group-list">
-					<il th:each="err : ${#fields.allErrors}" th:text="${err}" class="alert alert-primary">
-
-					</il>
-				</ul>
-			</div>
-			<button type="submit" class="btn btn-primary mb-3">Salva</button>
-
-		</form>
+		<h1>Non hai accesso a questa pagina</h1>
+		<a class="btn btn-primary" href="/">Torna alla home page</a>
+			<a class="btn btn-primary" href="/logout">Logout</a>
 
 	</div>
+
 	<!-- SCRIPT BOOTSTRAP-->
 	<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
 		integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"

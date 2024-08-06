@@ -42,7 +42,7 @@ public class NoteController {
 	}
 
 //----- UPDATE
-	@GetMapping("/{id}/edit")
+	@GetMapping("/edit/{id}")
 	public String editNota(@PathVariable("id") Integer id, Model model) {
 
 		model.addAttribute("nota", noteRepo.getReferenceById(id));
@@ -51,7 +51,7 @@ public class NoteController {
 		return "/note/edit";
 	}
 
-	@PostMapping("/{id}/edit")
+	@PostMapping("/edit/{id}")
 	public String notaEditedStore(@Valid @ModelAttribute("nota") Nota nota, BindingResult bindingResult) {
 
 		if (bindingResult.hasErrors()) {
@@ -65,7 +65,7 @@ public class NoteController {
 
 //----- DELETE
 
-	@PostMapping("/{id}/delete")
+	@PostMapping("/delete/{id}")
 	public String notaDel(@PathVariable("id") Integer id) {
 
 		Ticket ticketRef = noteRepo.getReferenceById(id).getTicket();

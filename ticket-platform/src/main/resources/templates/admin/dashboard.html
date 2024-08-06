@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org" lang="en">
 
 <head>
-	<title>___BLANK___</title>
+	<title>Dashboard admin</title>
 	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css"
 		integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
@@ -27,16 +27,28 @@
 					<tbody>
 						<tr th:each="user:${utenti}">
 							<td th:text="${user.getId()}"></td>
-							<td><a th:href="@{|/user/{user.getId()}|}" th:text="${user.getUsername()}"></a></td>
+							<td><a th:href="@{|/user/${user.getId()}|}" th:text="${user.getUsername()}"></a></td>
 							<td th:text="${user.getIsAttivo()} ? |Attivo| : |Non attivo|"></td>
 						</tr>
 					</tbody>
 				</table>
+				<a class="btn btn-primary" href="/user/create">Nuovo utente</a>
 			</div>
 
 			<!-- tabella ticket -->
 			<!-- con pulsantone show ticket e add note-->
+
 			<div class="f-grow-2 p-2">
+				<div>
+					
+				<form th:action="@{|/admin/${titolo}|}" method="post" th:object="${titolo}">
+					<label for="titolo" class="form-label">Cerca per titolo</label>
+					<input type="text" id="titolo" name="titolo" th:field="*{}" class="form-control">
+					<input type="submit" class="btn btn-primary" value="Cerca">
+				</form>
+				</div>
+
+
 				<table class="table">
 					<thead>
 						<tr>
@@ -80,8 +92,8 @@
 					</tbody>
 				</table>
 			</div>
-			
-			</div>
+
+		</div>
 
 
 	</div>

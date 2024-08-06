@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -14,9 +16,12 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import it.astrignano.tickets.model.Nota;
+import it.astrignano.tickets.model.Role;
 import it.astrignano.tickets.model.Ticket;
+import it.astrignano.tickets.model.User;
 import it.astrignano.tickets.repository.CategorieRepository;
 import it.astrignano.tickets.repository.NoteRepository;
+import it.astrignano.tickets.repository.RoleRepository;
 import it.astrignano.tickets.repository.StatoRepository;
 import it.astrignano.tickets.repository.TicketRepository;
 import it.astrignano.tickets.repository.UserRepository;
@@ -40,11 +45,28 @@ public class TicketController {
 	
 	@Autowired
 	private NoteRepository noteRepo;
+	
+	@Autowired
+	private RoleRepository roleRepo;
 
 //-----READ-----
 	@GetMapping("/{id}")
-	public String show(@PathVariable("id") Integer id, Model model) {
+	public String show(@PathVariable("id") Integer id, Model model, @AuthenticationPrincipal UserDetails currentUser) {
 
+	User user = userRepo.getReferenceById(id);
+		
+		User provUser = new User();
+		for(User utente:userRepo.findAll()) {
+			if(utente.getUsername().equals(currentUser.getUsername())) {
+				provUser = utente;
+				break;
+			}
+		}
+		if(!provUser.getRoles().contains(roleRepo.getReferenceById(1))) {
+		if(!currentUser.getUsername().equals(user.getUsername())) {
+			return"/error";
+		}
+		}
 		model.addAttribute("ticket", ticketRepo.findById(id).get());
 		model.addAttribute("stati", statoRepo.findAll());
 
@@ -66,7 +88,7 @@ public class TicketController {
 	}
 
 	@PostMapping("/create")
-	public String storeNew(@Valid @ModelAttribute("ticket") Ticket newTicket, BindingResult bindingResult) {
+	public String storeNew(@Valid @ModelAttribute("ticket") Ticket newTicket, BindingResult bindingResult, Model model) {
 
 		/*
 		 * !!!!!!! AGGIUNGERE VALIDATION UTENTE ATTIVO !!!!!!! IN CASO DI MANOMISSIONE
@@ -74,6 +96,10 @@ public class TicketController {
 		 * giro sono tanti
 		 */
 
+
+		model.addAttribute("operatori", userRepo.findAll());
+		model.addAttribute("categorie", cateRepo.findAll());
+		
 		if (bindingResult.hasErrors()) {
 			return "/ticket/edit";
 		}
@@ -87,7 +113,7 @@ public class TicketController {
 
 //-----UPDATE----
 
-	@GetMapping("/{id}/edit")
+	@GetMapping("/edit/{id}")
 	public String editTicket(@PathVariable("id") Integer id, Model model) {
 
 		model.addAttribute("ticket", ticketRepo.getReferenceById(id));
@@ -99,7 +125,7 @@ public class TicketController {
 		return "/ticket/edit";
 	}
 
-	@PostMapping("/{id}/update")
+	@PostMapping("/update/{id}")
 	public String updateTicket(@Valid @ModelAttribute("ticket") Ticket upTicket, @PathVariable("id") Integer id,
 			BindingResult bindingResult) {
 
@@ -114,7 +140,7 @@ public class TicketController {
 
 //----DELETE-----
 
-	@PostMapping("/{id}/delete")
+	@PostMapping("/delete/{id}")
 	public String deleteTicket(@PathVariable("id") Integer idTicket) {
 
 		
@@ -126,12 +152,12 @@ public class TicketController {
 
 		ticketRepo.deleteById(idTicket);
 
-		return "redirect:/tickets";
+		return "redirect:/";
 	}
 
 //------UPDATE STATO del ticket
 
-	@PostMapping("/{id}/stato")
+	@PostMapping("/stato/{id}")
 	public String updateStato(@Valid @ModelAttribute("ticket") Ticket statoTicket, @PathVariable("id") Integer id,
 			BindingResult bindingResult) {
 
@@ -147,7 +173,7 @@ public class TicketController {
 
 //-------AGGIUNGI NOTA
 
-	@GetMapping("/{id}/aggiungi-nota")
+	@GetMapping("/aggiungi-nota/{id}")
 	public String addNota(@PathVariable("id") Integer ticketId, Model model) {
 
 		Ticket ticketRef = ticketRepo.getReferenceById(ticketId);

@@ -35,7 +35,7 @@ public class Nota {
 	private LocalDateTime dataCreazione = LocalDateTime.now();
 	
 	@NotBlank(message="Inserisci un testo nel corpo della nota.")
-	@Column(name="corpo_nota")
+	@Column(name="corpo_nota", nullable=false)
 	private String corpo;
 
 	public Integer getId() {

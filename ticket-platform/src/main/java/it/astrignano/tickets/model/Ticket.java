@@ -18,6 +18,7 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 
 @Entity
@@ -49,6 +50,7 @@ public class Ticket {
 	private User utente;
 	
 	@ManyToMany()
+	@NotEmpty(message="Seleziona almeno una categoria.")
 	@JoinTable(
 			name = "ticket_categorie",
 			joinColumns = @JoinColumn(name = "id_ticket"),

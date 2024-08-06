@@ -75,6 +75,7 @@ public class CategoriaController {
 	@PostMapping("{id}/delete")
 	public String deleteCat(@PathVariable("id") Integer id) {
 
+		catRepo.getReferenceById(id).setTickets(null);
 		catRepo.deleteById(id);
 
 		return "redirect:/categorie";

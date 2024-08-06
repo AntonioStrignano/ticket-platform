@@ -8,9 +8,13 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 
 @Entity
@@ -24,18 +28,21 @@ public class User {
 
 	@NotNull
 	@Column(unique=true)
+	@NotBlank(message="Inserisci username.")
 	private String username;
 	
 	@NotNull
+	@NotBlank(message="Inserisci password.")
 	private String password;
 	
 	@ManyToMany(fetch = FetchType.EAGER)
+	@NotEmpty(message="Seleziona almeno un ruolo.")
 	private List<Role> roles;
 
-	@Column(name="flag_attivo")
+	@Column(name = "flag_attivo")
 	private Boolean isAttivo;
-	
-	@OneToMany(mappedBy="utente")
+
+	@OneToMany(mappedBy = "utente")
 	private List<Ticket> tickets;
 	
 	//GETTER E SETTER
@@ -86,6 +93,8 @@ public class User {
 	public void setTickets(List<Ticket> tickets) {
 		this.tickets = tickets;
 	}
+
+
 
 	
 	

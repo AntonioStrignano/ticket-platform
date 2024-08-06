@@ -10,53 +10,59 @@
 
 <body>
 
+
 	<div class="container">
-	<h1>User dashboard</h1>
-	<div class="container">
-<!-- DETTAGLI UTENTE   -->
-		<h2>Dettagli utente</h2>		
-		<p th:text="|Username: ${user.username}|"></p>
-		<span>Ruoli:
-			<ul>
-				<li th:each="ruolo:${user.roles}" th:text="${ruolo.getName()}"></li>
-			</ul>
-		</span>
-<!-- -	MODIFICA DETTAGLI   -->
-		<a class="btn btn-primary" th:href="@{|/user/${user.id}/update|}">Modifica dati</a>
-<!-- -	MODIFICA STATO  ATTIVITA'   -->
-<div>
-<span>Stato asttivita': </span>
-		<span th:text="${user.isAttivo} ? |Attivo| : |Non Attivo|"></span>
-		<div th:if="${noMoreTickets}">
-		<form th:action="@{|/user/${user.id}/flag|}" th:object="${user}" method="post" id="form-flag-attivo">
-			<select th:field="*{isAttivo}">
-				<option value="false">Non Attivo</option>
-				<option value="true">Attivo</option>
-			</select>			
-			<input type="hidden" th:field="*{id}">			
-			<input type="hidden" th:field="*{username}">			
-			<input type="hidden" th:field="*{password}">			
-			<button type="submit" class="btn btn-primary mb-3">Modifica Stato</button>
-		</form>
+		<h1>User dashboard</h1>
+		<a class="btn btn-primary" href="/admin" sec:authorize="hasAuthority('ADMIN')">Dashboard admin</a>
+		<div class="row">
+			<!-- DETTAGLI UTENTE   -->
+			<div class="col-4">
+
+				<h2>Dettagli utente</h2>
+				<p th:text="|Username: ${user.username}|"></p>
+				<span>Ruoli:
+					<ul>
+						<li th:each="ruolo:${user.roles}" th:text="${ruolo.getName()}"></li>
+					</ul>
+				</span>
+				<!-- -	MODIFICA DETTAGLI   -->
+				<a class="btn btn-primary" th:href="@{|/user/${user.id}/update|}">Modifica dati</a>
+				<!-- -	MODIFICA STATO  ATTIVITA'   -->
+				<div>
+					<span>Stato asttivita': </span>
+					<span th:text="${user.isAttivo} ? |Attivo| : |Non Attivo|"></span>
+					<div th:if="${noMoreTickets}">
+						<form th:action="@{|/user/${user.id}/flag|}" th:object="${user}" method="post"
+							id="form-flag-attivo">
+							<select th:field="*{isAttivo}">
+								<option value="false">Non Attivo</option>
+								<option value="true">Attivo</option>
+							</select>
+							<input type="hidden" th:field="*{id}">
+							<input type="hidden" th:field="*{username}">
+							<input type="hidden" th:field="*{password}">
+							<button type="submit" class="btn btn-primary mb-3">Modifica Stato</button>
+						</form>
+					</div>
+				</div>
+			</div>
+
+			<!--  LISTA TICKET UTENTE   -->
+
+			<div class="col-8">
+				<h2>Lista tickets</h2>
+				<ul>
+					<li th:each="ticket : ${user.tickets}">
+						<h3 th:text="${ticket.getTitolo()}"></h3>
+						<p th:text="${ticket.getStato().getNomeStato()}"></p>
+						<a class="btn btn-primary" th:href="@{|/tickets/${ticket.id}|}">Guarda ticket</a>
+					</li>
+				</ul>
+
+			</div>
 		</div>
-</div>
-	</div>
 
-<!--  LISTA TICKET UTENTE   -->
-
-<div>
-	<h2>Lista tickets</h2>
-	<ul>
-		<li th:each="ticket : ${user.tickets}">
-			<h3 th:text="${ticket.getTitolo()}"></h3>
-			<p th:text="${ticket.getStato().getNomeStato()}"></p>
-			<a class="btn btn-primary" th:href="@{|/tickets/${ticket.id}|}">Guarda ticket</a>
-		</li>
-	</ul>
-	
-</div>
-
-<!--    -->
+		<!--    -->
 
 	</div>
 	<!-- SCRIPT BOOTSTRAP-->
