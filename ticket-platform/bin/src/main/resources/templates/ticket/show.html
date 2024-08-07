@@ -25,7 +25,6 @@
 				<input type="hidden" th:field="*{titolo}" id="titolo">
 				<input type="hidden" th:field="*{dettaglio}" id="dettaglio">
 				<input type="hidden" th:field="*{utente}" id="utente">
-				<input type="hidden" th:field="*{categorie}" id="categorie">
 				<label for="stato" class="form-label">Modifica stato:</label>
 				<select th:field="*{stato}">
 					<option th:each="stato : ${stati}" th:value="${stato.id}" th:text="${stato.nomeStato}"></option>
@@ -79,7 +78,8 @@
 			</form>
 		</div>
 
-		<a class="btn btn-primary" href="/user">Vai alla dashboard</a>
+		<a class="btn btn-primary" th:href="@{|/user/${ticket.utente.getId()}|}">Vai alla dashboard</a>
+		<a class="btn btn-primary" href="/tickets" 		sec:authorize="hasAuthority('ADMIN')">Debug</a>
 
 
 

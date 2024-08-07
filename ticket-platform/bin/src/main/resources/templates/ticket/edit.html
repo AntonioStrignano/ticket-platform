@@ -29,7 +29,9 @@
 			<!-- utente -->
 			<label for="utente" class="form-label">Operatore assegnato</label>
 			<select th:field="*{utente}">
-				<option th:each="user : ${operatori}" th:value="${user.id}" th:text="${user.username}"></option>
+				<option th:each="user : ${operatori}" th:value="${user.id}" th:text="${user.username}"
+					th:if="${user.getIsAttivo()}"></option>
+				<!--				th:if="${user.isAttivo}"-->
 			</select>
 			<br>
 			<!-- categorie -->
@@ -51,8 +53,7 @@
 			<br>
 			<div th:if="${#fields.hasAnyErrors()}">
 				<ul class="list-group">
-					<il th:each="err : ${#fields.allErrors}" th:text="${err}"
-						class="alert alert-primary list-group-item">
+					<il th:each="err : ${#fields.allErrors}" th:text="${err}" class="alert alert-primary list-group-item">
 
 					</il>
 				</ul>

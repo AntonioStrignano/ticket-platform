@@ -26,13 +26,13 @@
 					</ul>
 				</span>
 				<!-- -	MODIFICA DETTAGLI   -->
-				<a class="btn btn-primary" th:href="@{|/user/update/${user.id}|}">Modifica dati</a>
+				<a class="btn btn-primary" th:href="@{|/user/${user.id}/update|}">Modifica dati</a>
 				<!-- -	MODIFICA STATO  ATTIVITA'   -->
 				<div>
-					<span>Stato attività: </span>
+					<span>Stato asttivita': </span>
 					<span th:text="${user.isAttivo} ? |Attivo| : |Non Attivo|"></span>
 					<div th:if="${noMoreTickets}">
-						<form th:action="@{|/user/flag/${user.id}|}" th:object="${user}" method="post"
+						<form th:action="@{|/user/${user.id}/flag|}" th:object="${user}" method="post"
 							id="form-flag-attivo">
 							<select th:field="*{isAttivo}">
 								<option value="false">Non Attivo</option>
@@ -41,7 +41,6 @@
 							<input type="hidden" th:field="*{id}">
 							<input type="hidden" th:field="*{username}">
 							<input type="hidden" th:field="*{password}">
-							<input type="hidden" th:field="*{roles}">
 							<button type="submit" class="btn btn-primary mb-3">Modifica Stato</button>
 						</form>
 					</div>

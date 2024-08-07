@@ -47,12 +47,12 @@ public class MainController {
 			}
 		}
 
-		if(!currUser.getRoles().contains(roleRepo.getReferenceById(1))) {
-			return"redirect:/admin";
-		}
 		model.addAttribute("currUser", currUser);
-		
-		return "/index";
+		if(!currUser.getRoles().contains(roleRepo.getReferenceById(2))) {
+			return"redirect:/admin";
+		} else {
+			return "redirect:/user";
+		}
 
 	}
 
@@ -61,8 +61,10 @@ public class MainController {
 
 		model.addAttribute("tickets", ticketRepo.findAll());
 		model.addAttribute("utenti", userRepo.findAll());
-		String titolo = new String();
-		model.addAttribute("titolo", titolo );
+		Ticket byTitolo = new Ticket();
+		model.addAttribute("byTitolo", byTitolo );
+		
+		
 
 		return "/admin/dashboard";
 	}

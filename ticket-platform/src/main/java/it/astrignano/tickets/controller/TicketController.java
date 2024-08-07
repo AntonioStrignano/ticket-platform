@@ -80,8 +80,15 @@ public class TicketController {
 		Ticket newTicket = new Ticket();
 		newTicket.setStato(statoRepo.getReferenceById(1));
 
+		List<User> userAttivi = new ArrayList<User>();
+		for(User user:userRepo.findAll()) {
+			if(user.getIsAttivo()) {
+				userAttivi.add(user);
+			}
+		}
+		
 		model.addAttribute("ticket", newTicket);
-		model.addAttribute("operatori", userRepo.findAll());
+		model.addAttribute("operatori", userAttivi);
 		model.addAttribute("categorie", cateRepo.findAll());
 
 		return "/ticket/edit";
@@ -167,7 +174,7 @@ public class TicketController {
 		ticketRepo.save(statoTicket);
 
 		// ---------
-		return "redirect:/tickets/" + statoTicket.getId();
+		return "redirect:/tickets/" + id;
 
 	}
 

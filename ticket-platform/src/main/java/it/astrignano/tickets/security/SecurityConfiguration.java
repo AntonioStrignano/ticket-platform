@@ -18,7 +18,10 @@ public class SecurityConfiguration {
 				.requestMatchers("/admin", "/admin/**").hasAuthority("ADMIN")
 				.requestMatchers("/note/**").hasAnyAuthority("ADMIN", "USER")
 				.requestMatchers("/tickets/create", "/tickets/edit/**", "/tickets/delete/**").hasAuthority("ADMIN")
-				.requestMatchers("/user/create", "/user/update/**").hasAuthority("ADMIN").requestMatchers("/**")
+				.requestMatchers("/tickets/stato/**").hasAnyAuthority("ADMIN", "USER")
+				.requestMatchers("/user/create").hasAuthority("ADMIN")
+				.requestMatchers("/user/update/**", "/user/flag/**").hasAnyAuthority("ADMIN", "USER")
+				.requestMatchers("/**")
 				.permitAll().and().formLogin().and().logout().and().exceptionHandling().and().csrf().disable();
 
 		return http.build();

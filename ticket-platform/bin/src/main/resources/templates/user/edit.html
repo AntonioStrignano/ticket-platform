@@ -9,9 +9,9 @@
 </head>
 
 <body>
-
-
-
+	
+		
+		
 	</div>
 	<div class="container">
 		<h1 th:unless=${editMode} th:text="|Crea nuovo utente|"></h1>
@@ -21,7 +21,6 @@
 			th:action="${editMode} ? @{|/user/update/${user.id}|} : @{/user/create}">
 
 			<input type="hidden" th:field="*{id}" id="id">
-			<input type="hidden" th:field="*{isAttivo}" id="flag-attivo">
 			<!-- username -->
 			<label for="username" class="form-label">Username</label>
 			<input type="text" th:field="*{username}" placeholder="Username" id="username" class="form-control">
@@ -32,17 +31,12 @@
 			<input type="text" class="form-control" id="password" th:field="*{password}"></input>
 
 			<!-- ruolo -->
-			<div sec:authorize="hasAuthority('ADMIN')">
-				<label for="ruoli" class="form-label">Ruoli</label>
-				<th:block th:each="ruolo:${ruoli}">
-					<input type="checkbox" name="ruolo" th:value="${ruolo.getId}" th:field="*{roles}">
-					<label th:text="${ruolo.getName()}"></label>
-				</th:block>
-			</div>
-			<div sec:authorize="hasAuthority('USER')">
-				<input type="hidden" th:field="*{roles}" id="roles">
-			</div>
-			
+			<label for="ruoli" class="form-label">Ruoli</label>
+			<th:block th:each="ruolo:${ruoli}">
+				<input type="checkbox" name="ruolo" th:value="${ruolo.getId}" th:field="*{roles}">
+				<label th:text="${ruolo.getName()}"></label>
+			</th:block>
+
 
 			<div th:if="${#fields.hasAnyErrors()}">
 				<ul class="list-group">
