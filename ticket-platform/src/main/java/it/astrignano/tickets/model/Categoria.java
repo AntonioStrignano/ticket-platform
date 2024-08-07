@@ -2,6 +2,9 @@ package it.astrignano.tickets.model;
 
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -12,51 +15,44 @@ import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
 
 @Entity
-@Table(name="categoria")
+@Table(name = "categoria")
 public class Categoria {
 
-	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name="id")
+	@Column(name = "id")
 	private Integer id;
-	
-	@NotBlank(message="Nome categoria obbligatorio")
-	@Column(name="nome_categoria", nullable = false)
-	private String nomeCategoria;
-	
-	
-	@ManyToMany(mappedBy = "categorie")
-	private List<Ticket> tickets;
 
+	@NotBlank(message = "Nome categoria obbligatorio")
+	@Column(name = "nome_categoria", nullable = false)
+	private String nomeCategoria;
+
+	@ManyToMany(mappedBy = "categorie")
+	@JsonManagedReference
+	private List<Ticket> tickets;
 
 	public Integer getId() {
 		return id;
 	}
 
-
 	public void setId(Integer id) {
 		this.id = id;
 	}
-
 
 	public String getNomeCategoria() {
 		return nomeCategoria;
 	}
 
-
 	public void setNomeCategoria(String nomeCategoria) {
 		this.nomeCategoria = nomeCategoria;
 	}
-
 
 	public List<Ticket> getTickets() {
 		return tickets;
 	}
 
-
 	public void setTickets(List<Ticket> tickets) {
 		this.tickets = tickets;
 	}
-	
+
 }

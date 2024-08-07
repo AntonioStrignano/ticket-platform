@@ -2,6 +2,9 @@ package it.astrignano.tickets.model;
 
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -37,12 +40,14 @@ public class User {
 	
 	@ManyToMany(fetch = FetchType.EAGER)
 	@NotEmpty(message="Seleziona almeno un ruolo.")
+	@JsonManagedReference
 	private List<Role> roles;
 
 	@Column(name = "flag_attivo")
 	private Boolean isAttivo;
 
 	@OneToMany(mappedBy = "utente")
+	@JsonBackReference
 	private List<Ticket> tickets;
 	
 	//GETTER E SETTER

@@ -5,6 +5,9 @@ import java.util.List;
 import org.hibernate.annotations.ColumnDefault;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import it.astrignano.tickets.repository.StatoRepository;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -41,12 +44,14 @@ public class Ticket {
 	
 	@ManyToOne
 	@JoinColumn(name="id_stato")
+	@JsonBackReference
 	private Stato stato;
 	
 	
 	@ManyToOne
 	@NotNull
 	@JoinColumn(name="id_utente")
+	@JsonManagedReference
 	private User utente;
 	
 	@ManyToMany()
@@ -56,9 +61,11 @@ public class Ticket {
 			joinColumns = @JoinColumn(name = "id_ticket"),
 			inverseJoinColumns = @JoinColumn(name = "id_categoria")
 			)
+	@JsonBackReference
 	private List<Categoria> categorie;
 	
 	@OneToMany(mappedBy="ticket")
+	@JsonManagedReference
 	private List<Nota> note;
 	
 	

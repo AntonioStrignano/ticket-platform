@@ -2,6 +2,8 @@ package it.astrignano.tickets.model;
 
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -25,6 +27,7 @@ public class Stato {
 	private String nomeStato;
 	
 	@OneToMany(mappedBy = "stato")
+	@JsonManagedReference
 	private List<Ticket> tickets;
 
 	public Integer getId() {

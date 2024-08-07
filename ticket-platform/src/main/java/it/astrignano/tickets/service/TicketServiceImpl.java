@@ -24,11 +24,6 @@ public class TicketServiceImpl implements TicketService {
 	private StatoRepository statoRepo;
 
 	@Override
-	public Optional<Ticket> findById(Integer id) {
-		return ticketRepo.findById(id);
-	}
-
-	@Override
 	public List<Ticket> findByCategory(Integer id) {
 		return cateRepo.getReferenceById(id).getTickets();
 	}

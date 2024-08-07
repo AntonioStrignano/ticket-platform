@@ -3,6 +3,8 @@ package it.astrignano.tickets.model;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -25,10 +27,12 @@ public class Nota {
 	
 	@ManyToOne
 	@JoinColumn(name="id_utente")
+	@JsonBackReference
 	private User utente;
 	
 	@ManyToOne
 	@JoinColumn(name="id_ticket")
+	@JsonBackReference
 	private Ticket ticket;
 
 	@Column(name="data_creazione")
