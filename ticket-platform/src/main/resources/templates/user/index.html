@@ -10,55 +10,107 @@
 
 <body>
 
+	<header class="d-flex flex-wrap justify-content-center py-3 mb-4 border-bottom">
+		<div sec:authorize="hasAuthority('ADMIN')">
 
+			<a href="/"
+				class="d-flex align-items-center mb-3 mb-md-0 me-md-auto link-body-emphasis text-decoration-none">
+				<svg class="bi me-2" width="40" height="32">
+					<use xlink:href="#bootstrap"></use>
+				</svg>
+			</a>
+
+			<ul class="nav nav-pills">
+				<li class="nav-item"><a href="/" class="nav-link" aria-current="page">Dashboard</a></li>
+				<li class="nav-item"><a href="/categorie" class="nav-link">Categorie</a></li>
+				<li class="nav-item"><a href="/tickets/create" class="nav-link">Nuovo ticket</a></li>
+				<li class="nav-item"><a href="/user/create" class="nav-link">Nuovo utente</a></li>
+				<li class="nav-item"><a href="/logout" class="nav-link">Logout</a></li>
+			</ul>
+		</div>
+		<div sec:authorize="!hasAuthority('ADMIN')">
+
+			<a href="/"
+				class="d-flex align-items-center mb-3 mb-md-0 me-md-auto link-body-emphasis text-decoration-none">
+				<svg class="bi me-2" width="40" height="32">
+					<use xlink:href="#bootstrap"></use>
+				</svg>
+			</a>
+
+			<ul class="nav nav-pills">
+				<li class="nav-item"><a href="/" class="nav-link active" aria-current="page">Dashboard</a></li>
+				<li class="nav-item"><a href="/logout" class="nav-link">Logout</a></li>
+			</ul>
+		</div>
+	</header>
+	<!-- /HEADER-->
 	<div class="container">
-		<h1>User dashboard</h1>
 		<a class="btn btn-primary" href="/admin" sec:authorize="hasAuthority('ADMIN')">Dashboard admin</a>
+		<h1>User dashboard</h1>
+		<hr class=" my-4">
 		<div class="row">
 			<!-- DETTAGLI UTENTE   -->
-			<div class="col-4">
+			<div class="col">
 
 				<h2>Dettagli utente</h2>
-				<p th:text="|Username: ${user.username}|"></p>
-				<span>Ruoli:
-					<ul>
-						<li th:each="ruolo:${user.roles}" th:text="${ruolo.getName()}"></li>
-					</ul>
-				</span>
-				<!-- -	MODIFICA DETTAGLI   -->
-				<a class="btn btn-primary" th:href="@{|/user/update/${user.id}|}">Modifica dati</a>
-				<!-- -	MODIFICA STATO  ATTIVITA'   -->
-				<div>
-					<span>Stato attività: </span>
-					<span th:text="${user.isAttivo} ? |Attivo| : |Non Attivo|"></span>
-					<div th:if="${noMoreTickets}">
-						<form th:action="@{|/user/flag/${user.id}|}" th:object="${user}" method="post"
-							id="form-flag-attivo">
-							<select th:field="*{isAttivo}">
-								<option value="false">Non Attivo</option>
-								<option value="true">Attivo</option>
-							</select>
-							<input type="hidden" th:field="*{id}">
-							<input type="hidden" th:field="*{username}">
-							<input type="hidden" th:field="*{password}">
-							<input type="hidden" th:field="*{roles}">
-							<button type="submit" class="btn btn-primary mb-3">Modifica Stato</button>
-						</form>
+				<div class="card-body p-4">
+					<h3 class="mb-3" th:text="|Username: ${user.username}|"></h3>
+					<span>Ruoli:
+						<ul>
+							<li th:each="ruolo:${user.roles}" th:text="${ruolo.getName()}"></li>
+						</ul>
+					</span>
+					<!-- -	MODIFICA DETTAGLI   -->
+					<a class="btn btn-primary" th:href="@{|/user/update/${user.id}|}">Modifica dati</a>
+
+					<hr class=" my-4">
+					<div class="d-flex justify-content-start align-items-center"> <!-- -	MODIFICA STATO  ATTIVITA'   -->
+						<div>
+							<span>Stato attività: </span>
+							<span th:text="${user.isAttivo} ? |Attivo| : |Non Attivo|"></span>
+							<div th:if="${noMoreTickets}">
+								<form th:action="@{|/user/flag/${user.id}|}" th:object="${user}" method="post"
+									id="form-flag-attivo">
+									<select th:field="*{isAttivo}">
+										<option value="false">Non Attivo</option>
+										<option value="true">Attivo</option>
+									</select>
+									<input type="hidden" th:field="*{id}">
+									<input type="hidden" th:field="*{username}">
+									<input type="hidden" th:field="*{password}">
+									<input type="hidden" th:field="*{roles}">
+									<button type="submit" class="btn btn-primary mb-3">Modifica Stato</button>
+								</form>
+							</div>
+						</div>
 					</div>
 				</div>
-			</div>
 
+			</div>
 			<!--  LISTA TICKET UTENTE   -->
 
-			<div class="col-8">
+			<div class="col">
 				<h2>Lista tickets</h2>
-				<ul>
-					<li th:each="ticket : ${user.tickets}">
-						<h3 th:text="${ticket.getTitolo()}"></h3>
-						<p th:text="${ticket.getStato().getNomeStato()}"></p>
-						<a class="btn btn-primary" th:href="@{|/tickets/${ticket.id}|}">Guarda ticket</a>
-					</li>
-				</ul>
+				<div th:each="ticket : ${user.tickets}">
+					<div class="row d-flex justify-content-center">
+						<div class="col col-xl-10">
+							<div class="card mb-2" style="border-radius: 15px;">
+								<div class="card-body p-3">
+									<h3 class="mb-3" th:text="${ticket.getTitolo()}">Ticket Title</h3>
+
+									<p class="card-text" th:text="|Stato: ${ticket.getStato().getNomeStato()}|"></p>
+									<hr class="my-4">
+									<div class="d-flex justify-content-start align-items-center">
+										<a th:href="@{|/tickets/${ticket.id}|}" class="btn btn-primary">Guarda
+											ticket</a>
+									</div>
+								</div>
+							</div>
+
+						</div>
+					</div>
+
+				</div>
 
 			</div>
 		</div>

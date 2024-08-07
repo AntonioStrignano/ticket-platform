@@ -10,71 +10,45 @@
 
 <body>
 
+	<header class="d-flex flex-wrap justify-content-center py-3 mb-4 border-bottom">
+		<div sec:authorize="hasAuthority('ADMIN')">
+
+			<a href="/"
+				class="d-flex align-items-center mb-3 mb-md-0 me-md-auto link-body-emphasis text-decoration-none">
+				<svg class="bi me-2" width="40" height="32">
+					<use xlink:href="#bootstrap"></use>
+				</svg>
+			</a>
+
+			<ul class="nav nav-pills">
+				<li class="nav-item"><a href="/" class="nav-link" aria-current="page">Dashboard</a></li>
+				<li class="nav-item"><a href="/categorie" class="nav-link">Categorie</a></li>
+				<li class="nav-item"><a href="/tickets/create" class="nav-link">Nuovo ticket</a></li>
+				<li class="nav-item"><a href="/user/create" class="nav-link">Nuovo utente</a></li>
+				<li class="nav-item"><a href="/logout" class="nav-link">Logout</a></li>
+			</ul>
+		</div>
+		<div sec:authorize="!hasAuthority('ADMIN')">
+
+			<a href="/"
+				class="d-flex align-items-center mb-3 mb-md-0 me-md-auto link-body-emphasis text-decoration-none">
+				<svg class="bi me-2" width="40" height="32">
+					<use xlink:href="#bootstrap"></use>
+				</svg>
+			</a>
+
+			<ul class="nav nav-pills">
+				<li class="nav-item"><a href="/" class="nav-link" aria-current="page">Dashboard</a></li>
+				<li class="nav-item"><a href="/logout" class="nav-link">Logout</a></li>
+			</ul>
+		</div>
+	</header>
+
 	<div class="container">
 		<h1 th:text="${ticket.titolo}"></h1>
-		<p th:text="${ticket.dettaglio}"></p>
-		<p th:text="|Assegnato all'utente: ${ticket.utente.username}|"></p>
-		<p th:text="|Stato: ${ticket.getStato.nomeStato}|"></p>
 
-		<!-- update stato -->
-		<br>
-		<div>
-			<form method="post" th:action=" @{|/tickets/stato/${ticket.id}|}" th:object="${ticket}"
-				id="form-stato-update">
-				<input type="hidden" th:field="*{id}" id="id">
-				<input type="hidden" th:field="*{titolo}" id="titolo">
-				<input type="hidden" th:field="*{dettaglio}" id="dettaglio">
-				<input type="hidden" th:field="*{utente}" id="utente">
-				<input type="hidden" th:field="*{categorie}" id="categorie">
-				<label for="stato" class="form-label">Modifica stato:</label>
-				<select th:field="*{stato}">
-					<option th:each="stato : ${stati}" th:value="${stato.id}" th:text="${stato.nomeStato}"></option>
-				</select>
-				<button type="submit" class="btn btn-primary mb-3">Salva</button>
-			</form>
-		</div>
-
-		<div>
-			<h3>Categorie:</h3>
-			<ul>
-				<li th:each="categ:${ticket.getCategorie}" th:text="${categ.nomeCategoria}"></li>
-			</ul>
-		</div>
-		<!-- NOTE -->
-		<div>
-			<h4>Note:</h4>
-			<p th:if="${ticket.getNote.isEmpty()}">Non ci sono note su questo ticket.</p>
-			<a th:href="@{|/tickets/aggiungi-nota/${ticket.id}|}" class="btn btn-primary">Aggiungi nota</a>
-			<ul>
-				<li th:each="nota:${ticket.getNote}">
-					<div style="border: solid 1px;">
-						<p th:text="|Utente: ${nota.utente.username}|"></p>
-						<p th:text="|Data aggiunta: ${nota.dataCreazione} ${nota.oraCreazione}|"></p>						
-						<!-- 
-						<p th:text="|Data aggiunta: ${nota.dataCreazione}|"></p>
-							${#dates.format(${nota.dataCreazione},'dd/MM/YYYY')}
-							
-						-->
-						<p th:text='|"${nota.corpo}"|'></p>
-						<a class="btn btn-primary" th:href="@{|/note/edit/${nota.id}|}">Modifica</a>
-						<form method="post" id="delete-nota" th:action="@{|/note/${nota.id}/delete|}">
-							<button class="btn btn-danger" type="submit" id="submitButton"
-								th:data-confirm-delete="|Sei sicuro di voler cancellare la nota?|"
-								th:onclick="if(!confirm(this.getAttribute('data-confirm-delete'))) return false">
-								Elimina
-							</button>
-						</form>
-
-					</div>
-				</li>
-			</ul>
-		</div>
-
-		<a class="btn btn-primary" th:href="@{|/tickets/edit/${ticket.id}|}"
-			sec:authorize="hasAuthority('ADMIN')">modifica</a>
-
-
-		<div sec:authorize="hasAuthority('ADMIN')">
+		<div sec:authorize="hasAuthority('ADMIN')" class="row">
+			<a class="btn btn-primary" th:href="@{|/tickets/edit/${ticket.id}|}">modifica</a>
 			<form th:action="@{|/tickets/delete/${ticket.id}|}" method="post">
 				<button class="btn btn-danger" type="submit" id="submitButton"
 					th:data-confirm-delete="|Sei sicuro di voler cancellare il ticket?|"
@@ -83,21 +57,78 @@
 				</button>
 			</form>
 		</div>
+		<hr class=" my-4">
+		<div class="row">
 
-		<a class="btn btn-primary" href="/user">Vai alla dashboard</a>
+			<div class="col">
+				<p th:text="${ticket.dettaglio}"></p>
+				<hr class=" my-4">
+				<p th:text="|Assegnato all'utente: ${ticket.utente.username}|"></p>
+				<p th:text="|Stato: ${ticket.getStato.nomeStato}|"></p>
 
+				<!-- update stato -->
+				<br>
+				<div>
+					<form method="post" th:action=" @{|/tickets/stato/${ticket.id}|}" th:object="${ticket}"
+						id="form-stato-update">
+						<label for="stato" class="form-label">Modifica stato:</label>
+						<select th:field="*{stato}">
+							<option th:each="stato : ${stati}" th:value="${stato.id}" th:text="${stato.nomeStato}">
+							</option>
+						</select><br>
+						<input type="hidden" th:field="*{id}" id="id">
+						<input type="hidden" th:field="*{titolo}" id="titolo">
+						<input type="hidden" th:field="*{dettaglio}" id="dettaglio">
+						<input type="hidden" th:field="*{utente}" id="utente">
+						<input type="hidden" th:field="*{categorie}" id="categorie">
+						<button type="submit" class="btn btn-primary mb-3">Salva</button>
+					</form>
+				</div>
+				<hr class=" my-4">
+				<div>
+					<ul class="list-group">
+						<li class="list-group-item"><h4>Categorie:</h4></li>
+						<li class="list-group-item" th:each="categ:${ticket.getCategorie}"
+							th:text="${categ.nomeCategoria}"></li>
+					</ul>
+				</div>
+			</div>
+			<!-- NOTE -->
+			<div class="col">
+				<h4>Note:</h4>
+				<p th:if="${ticket.getNote.isEmpty()}">Non ci sono note su questo ticket.</p>
+				<a th:href="@{|/tickets/aggiungi-nota/${ticket.id}|}" class="btn btn-primary">Aggiungi nota</a>
+				<div th:each="nota:${ticket.getNote}" class="card-body p-4">
+					<h3 class="mb-3" th:text="|Utente: ${nota.utente.username}|"></h3>
+					<p th:text="|Data aggiunta: ${nota.dataCreazione} ${nota.oraCreazione}|"></p>
+					<p th:text='|"${nota.corpo}"|'></p>
+					<hr class=" my-4">
+					<div class="row">
+						<a class="btn btn-primary" th:href="@{|/note/edit/${nota.id}|}">Modifica</a>
+						<form method="post" id="delete-nota" th:action="@{|/note/${nota.id}/delete|}">
+							<button class="btn btn-danger" type="submit" id="submitButton"
+								th:data-confirm-delete="|Sei sicuro di voler cancellare la nota?|"
+								th:onclick="if(!confirm(this.getAttribute('data-confirm-delete'))) return false">
+								Elimina
+							</button>
+						</form>
+					</div>
+				</div>
+			</div>
 
+		</div>
+	</div>
 
-		<!-- SCRIPT BOOTSTRAP-->
-		<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
-			integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
-			crossorigin="anonymous"></script>
-		<script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.7/dist/umd/popper.min.js"
-			integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
-			crossorigin="anonymous"></script>
-		<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.min.js"
-			integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
-			crossorigin="anonymous"></script>
+	<!-- SCRIPT BOOTSTRAP-->
+	<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+		integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+		crossorigin="anonymous"></script>
+	<script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.7/dist/umd/popper.min.js"
+		integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+		crossorigin="anonymous"></script>
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.min.js"
+		integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+		crossorigin="anonymous"></script>
 </body>
 
 </html>

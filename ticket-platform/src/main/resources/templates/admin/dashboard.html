@@ -9,6 +9,23 @@
 </head>
 
 <body>
+	<header class="d-flex flex-wrap justify-content-center py-3 mb-4 border-bottom">
+		<a href="/" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto link-body-emphasis text-decoration-none">
+			<svg class="bi me-2" width="40" height="32">
+				<use xlink:href="#bootstrap"></use>
+			</svg>
+		</a>
+
+		<ul class="nav nav-pills">
+			<li class="nav-item"><a href="/" class="nav-link active" aria-current="page">Dashboard</a></li>
+			<li class="nav-item"><a href="/categorie" class="nav-link">Categorie</a></li>
+			<li class="nav-item"><a href="/tickets/create" class="nav-link">Nuovo ticket</a></li>
+			<li class="nav-item"><a href="/user/create" class="nav-link">Nuovo utente</a></li>
+			<li class="nav-item"><a href="/logout" class="nav-link">Logout</a></li>
+		</ul>
+	</header>
+
+
 
 	<div class="container">
 		<h1>Dashboard Admin</h1>
@@ -39,20 +56,16 @@
 			<!-- con pulsantone show ticket e add note-->
 
 			<div class="f-grow-2 p-2">
-				
+
 				<div>
-					
-				<form action="/admin/search" method="get">
-					<label for="titolo" class="form-label">Cerca per titolo</label>
-					<input type="text" id="titolo" name="titolo" class="form-control">
-					<input type="submit" class="btn btn-primary" value="Cerca">
-				</form>
+
+					<form action="/admin/search" method="get">
+						<label for="titolo" class="form-label">Cerca per titolo</label>
+						<input type="text" id="titolo" name="titolo" class="form-control">
+						<input type="submit" class="btn btn-primary" value="Cerca">
+					</form>
 				</div>
 
-<div>
-	<a href="/tickets/create" class="btn btn-primary">Nuovo Ticket</a>
-	<a href="/categorie" class="btn btn-primary">Gestisci categorie</a>
-</div>
 
 				<table class="table">
 					<thead>
@@ -73,15 +86,16 @@
 							</td>
 							<td th:text="${ticket.stato.getNomeStato()}">stato</td>
 							<td>
-								<ul>
-									<li th:each="cate : ${ticket.categorie}" th:text="${cate.getNomeCategoria()}"></li>
+								<ul class="list-group">
+									<li th:each="cate : ${ticket.categorie}" th:text="${cate.getNomeCategoria()}" class="list-group-item"></li>
 								</ul>
 							</td>
 							<td>
+								<div class="d-flex gap-3">
 								<!--  dettaglio  -->
 								<a class="btn btn-primary" th:href="@{|/tickets/${ticket.id}|}">Visualizza</a>
 								<!--  agg note -->
-								<a class="btn-btn-primary" th:href="@{|/tickets/${ticket.id}/aggiungi-nota|}">Aggiungi
+								<a class="btn btn-primary" th:href="@{|/tickets/${ticket.id}/aggiungi-nota|}">Aggiungi
 									nota</a>
 								<!--  elimina  -->
 
@@ -92,6 +106,7 @@
 										Elimina
 									</button>
 								</form>
+								</div>
 							</td>
 						</tr>
 					</tbody>

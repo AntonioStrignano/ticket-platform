@@ -9,12 +9,26 @@
 </head>
 
 <body>
+	<header class="d-flex flex-wrap justify-content-center py-3 mb-4 border-bottom">
+		<a href="/" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto link-body-emphasis text-decoration-none">
+			<svg class="bi me-2" width="40" height="32">
+				<use xlink:href="#bootstrap"></use>
+			</svg>
+		</a>
 
+		<ul class="nav nav-pills">
+			<li class="nav-item"><a href="/" class="nav-link" aria-current="page">Dashboard</a></li>
+			<li class="nav-item"><a href="/categorie" class="nav-link active">Categorie</a></li>
+			<li class="nav-item"><a href="/tickets/create" class="nav-link">Nuovo ticket</a></li>
+			<li class="nav-item"><a href="/user/create" class="nav-link">Nuovo utente</a></li>
+			<li class="nav-item"><a href="/logout" class="nav-link">Logout</a></li>
+		</ul>
+	</header>
 	<div class="container">
 		<h1>Categorie</h1>
 		<div class="d-flex">
 			<!-- tab cate -->
-			<div class="flex-fill">
+			<div class="flex-fill p-2">
 				<table class="table">
 					<thead>
 						<tr>
@@ -28,7 +42,7 @@
 							<td><span th:text="${cate.id}"></span></td>
 							<td><span th:text="${cate.nomeCategoria}"></span>
 							</td>
-							<td>
+							<td class="d-flex">
 								<!-- BUTTONS -->
 
 								<a class="btn btn-primary" th:href="@{|/categorie/${cate.id}/edit|}">Modifica</a>
@@ -49,7 +63,7 @@
 			</div>
 			<!-- /tabella cate -->
 			<!-- form mnew cate -->
-			<div>
+			<div class="p-2">
 				<h3>Nuova categoria</h3>
 				<form method="post" th:object="${categoria}" th:action="@{categorie/create}">
 					<input type="text" th:field="*{nomeCategoria}">
@@ -63,7 +77,7 @@
 					<button type="submit" class="btn btn-primary mb-3">Salva</button>
 				</form>
 
-<a href="/admin" class="btn btn-primary">Torna indietro</a>
+				<a href="/admin" class="btn btn-primary">Torna indietro</a>
 
 			</div>
 		</div>
