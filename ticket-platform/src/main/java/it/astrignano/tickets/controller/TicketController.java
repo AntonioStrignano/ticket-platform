@@ -42,10 +42,10 @@ public class TicketController {
 
 	@Autowired
 	private StatoRepository statoRepo;
-	
+
 	@Autowired
 	private NoteRepository noteRepo;
-	
+
 	@Autowired
 	private RoleRepository roleRepo;
 
@@ -53,21 +53,16 @@ public class TicketController {
 	@GetMapping("/{id}")
 	public String show(@PathVariable("id") Integer id, Model model, @AuthenticationPrincipal UserDetails currentUser) {
 
-	User user = userRepo.getReferenceById(id);
-		
-		User provUser = new User();
-		for(User utente:userRepo.findAll()) {
-			if(utente.getUsername().equals(currentUser.getUsername())) {
-				provUser = utente;
-				break;
+		User user = userRepo.getReferenceById(id);
+
+		Ticket currTicket = ticketRepo.getReferenceById(id);
+		User currUser = userRepo.findByUsername(currentUser.getUsername()).get();
+		if (!currUser.getRoles().contains(roleRepo.getReferenceById(1))) {
+			if (currUser != currTicket.getUtente()) {
+				return "/error";
 			}
 		}
-		if(!provUser.getRoles().contains(roleRepo.getReferenceById(1))) {
-		if(!currentUser.getUsername().equals(user.getUsername())) {
-			return"/error";
-		}
-		}
-		model.addAttribute("ticket", ticketRepo.findById(id).get());
+		model.addAttribute("ticket", currTicket);
 		model.addAttribute("stati", statoRepo.findAll());
 
 		return "/ticket/show";
@@ -76,17 +71,17 @@ public class TicketController {
 //----CREATE----
 	@GetMapping("/create")
 	public String newTicket(Model model) {
-		
+
 		Ticket newTicket = new Ticket();
 		newTicket.setStato(statoRepo.getReferenceById(1));
 
 		List<User> userAttivi = new ArrayList<User>();
-		for(User user:userRepo.findAll()) {
-			if(user.getIsAttivo()) {
+		for (User user : userRepo.findAll()) {
+			if (user.getIsAttivo()) {
 				userAttivi.add(user);
 			}
 		}
-		
+
 		model.addAttribute("ticket", newTicket);
 		model.addAttribute("operatori", userAttivi);
 		model.addAttribute("categorie", cateRepo.findAll());
@@ -95,7 +90,8 @@ public class TicketController {
 	}
 
 	@PostMapping("/create")
-	public String storeNew(@Valid @ModelAttribute("ticket") Ticket newTicket, BindingResult bindingResult, Model model) {
+	public String storeNew(@Valid @ModelAttribute("ticket") Ticket newTicket, BindingResult bindingResult,
+			Model model) {
 
 		/*
 		 * !!!!!!! AGGIUNGERE VALIDATION UTENTE ATTIVO !!!!!!! IN CASO DI MANOMISSIONE
@@ -103,10 +99,9 @@ public class TicketController {
 		 * giro sono tanti
 		 */
 
-
 		model.addAttribute("operatori", userRepo.findAll());
 		model.addAttribute("categorie", cateRepo.findAll());
-		
+
 		if (bindingResult.hasErrors()) {
 			return "/ticket/edit";
 		}
@@ -150,9 +145,8 @@ public class TicketController {
 	@PostMapping("/delete/{id}")
 	public String deleteTicket(@PathVariable("id") Integer idTicket) {
 
-		
-		for(Nota nota:noteRepo.findAll()) {
-			if(nota.getTicket().getId() == idTicket) {
+		for (Nota nota : noteRepo.findAll()) {
+			if (nota.getTicket().getId() == idTicket) {
 				noteRepo.deleteById(nota.getId());
 			}
 		}
@@ -181,14 +175,14 @@ public class TicketController {
 //-------AGGIUNGI NOTA
 
 	@GetMapping("/aggiungi-nota/{id}")
-	public String addNota(@PathVariable("id") Integer ticketId, Model model) {
+	public String addNota(@PathVariable("id") Integer ticketId, Model model,
+			@AuthenticationPrincipal UserDetails currentUser) {
 
 		Ticket ticketRef = ticketRepo.getReferenceById(ticketId);
 		Nota newNota = new Nota();
 		newNota.setTicket(ticketRef);
-		// DA ELIMINARE-PROVVISORIO
-		newNota.setUtente(userRepo.getReferenceById(1));
-		
+		newNota.setUtente(userRepo.findByUsername(currentUser.getUsername()).get());
+
 		model.addAttribute("ticketRef", ticketRef);
 		model.addAttribute("nota", newNota);
 

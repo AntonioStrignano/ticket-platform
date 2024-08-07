@@ -39,13 +39,7 @@ public class MainController {
 	@GetMapping("")
 	public String landing(Model model, @AuthenticationPrincipal UserDetails currentUser) {
 
-		User currUser = new User();
-		for (User user : userRepo.findAll()) {
-			if (currentUser.getUsername().equals(user.getUsername())) {
-				currUser = userRepo.getReferenceById(user.getId());
-				break;
-			}
-		}
+		User currUser = userRepo.findByUsername(currentUser.getUsername()).get();
 
 		model.addAttribute("currUser", currUser);
 		if(!currUser.getRoles().contains(roleRepo.getReferenceById(2))) {

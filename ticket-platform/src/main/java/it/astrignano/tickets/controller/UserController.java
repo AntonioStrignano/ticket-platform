@@ -42,13 +42,7 @@ public class UserController {
 			@AuthenticationPrincipal UserDetails currentUser) {
 
 
-		User currUser = new User();
-		for (User utente : userRepo.findAll()) {
-			if (utente.getUsername().equals(currentUser.getUsername())) {
-				currUser = utente;
-				break;
-			}
-		}
+		User currUser = userRepo.findByUsername(currentUser.getUsername()).get();
 
 		if(!currUser.getRoles().contains(roleRepo.getReferenceById(2))) {
 			return "redirect:/admin";
@@ -79,15 +73,9 @@ public class UserController {
 
 		User user = userRepo.getReferenceById(id);
 
-		User provUser = new User();
-		for (User utente : userRepo.findAll()) {
-			if (utente.getUsername().equals(currentUser.getUsername())) {
-				provUser = utente;
-				break;
-			}
-		}
+		User currUser = userRepo.findByUsername(currentUser.getUsername()).get();
 
-		if (!provUser.getRoles().contains(roleRepo.getReferenceById(1))) {
+		if (!currUser.getRoles().contains(roleRepo.getReferenceById(1))) {
 			if (!currentUser.getUsername().equals(user.getUsername())) {
 				return "/error";
 			}
