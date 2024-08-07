@@ -1,7 +1,11 @@
 package it.astrignano.tickets.model;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.List;
+
+import org.springframework.format.annotation.DateTimeFormat;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
@@ -36,7 +40,12 @@ public class Nota {
 	private Ticket ticket;
 
 	@Column(name="data_creazione")
-	private LocalDateTime dataCreazione = LocalDateTime.now();
+	@DateTimeFormat(pattern="dd-MM-yyyy")
+	private LocalDate dataCreazione = LocalDate.now();
+	
+	@Column(name="ora-creazione")
+	@DateTimeFormat(pattern="HH:mm")
+	private LocalTime oraCreazione = LocalTime.now();
 	
 	@NotBlank(message="Inserisci un testo nel corpo della nota.")
 	@Column(name="corpo_nota", nullable=false)
@@ -66,12 +75,21 @@ public class Nota {
 		this.ticket = ticket;
 	}
 
-	public LocalDateTime getDataCreazione() {
+
+	public LocalDate getDataCreazione() {
 		return dataCreazione;
 	}
 
-	public void setDataCreazione(LocalDateTime dataCreazione) {
+	public void setDataCreazione(LocalDate dataCreazione) {
 		this.dataCreazione = dataCreazione;
+	}
+
+	public LocalTime getOraCreazione() {
+		return oraCreazione;
+	}
+
+	public void setOraCreazione(LocalTime oraCreazione) {
+		this.oraCreazione = oraCreazione;
 	}
 
 	public String getCorpo() {

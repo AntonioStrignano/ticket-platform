@@ -24,7 +24,7 @@ public class Categoria {
 	private Integer id;
 
 	@NotBlank(message = "Nome categoria obbligatorio")
-	@Column(name = "nome_categoria", nullable = false)
+	@Column(name = "nome_categoria", nullable = false, unique=true)
 	private String nomeCategoria;
 
 	@ManyToMany(mappedBy = "categorie")

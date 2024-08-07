@@ -19,47 +19,48 @@
 		<!-- con pulsantone show ticket e add note-->
 		<div>
 			<table class="table">
-				<thead>
-					<tr>
-						<th>ID Ticket</th>
-						<th>Titolo</th>
-						<th>Utente assegnato</th>
-						<th>Stato</th>
-						<th>Categorie</th>
-						<th>Azioni</th>
-					</tr>
-				</thead>
-				<tbody>
-					<tr th:each="ticket : ${ticketFiltered}">
-						<td th:text="${ticket.id}">id</td>
-						<td th:text="${ticket.titolo}">titolo</td>
-						<td th:text="|${ticket.utente.getId()}: ${ticket.utente.getUsername()}|">utente assegnato</td>
-						<td th:text="${ticket.stato.getNomeStato()}">stato</td>
-						<td>
-							<ul>
-								<li th:each="cate : ${ticket.categorie}" th:text="${cate.getNomeCategoria()}"></li>
-							</ul>
-						</td>
-						<td>
-							<!--  dettaglio  -->
-							<a class="btn btn-primary" th:href="@{|/tickets/${ticket.id}|}">Visualizza</a>
-							<!--  agg note -->
-							<a class="btn-btn-primary" th:href="@{|/tickets/${ticket.id}/aggiungi-nota|}">Aggiungi
-								nota</a>
-							<!--  elimina  -->
+				<table class="table">
+					<thead>
+						<tr>
+							<th>ID Ticket</th>
+							<th>Titolo</th>
+							<th>Utente assegnato</th>
+							<th>Stato</th>
+							<th>Categorie</th>
+							<th>Azioni</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr th:each="ticket : ${ticketFiltered}">
+							<td th:text="${ticket.id}">id</td>
+							<td th:text="${ticket.titolo}">titolo</td>
+							<td th:text="|${ticket.utente.getId()}: ${ticket.utente.getUsername()}|">utente assegnato
+							</td>
+							<td th:text="${ticket.stato.getNomeStato()}">stato</td>
+							<td>
+								<ul>
+									<li th:each="cate : ${ticket.categorie}" th:text="${cate.getNomeCategoria()}"></li>
+								</ul>
+							</td>
+							<td>
+								<!--  dettaglio  -->
+								<a class="btn btn-primary" th:href="@{|/tickets/${ticket.id}|}">Visualizza</a>
+								<!--  agg note -->
+								<a class="btn-btn-primary" th:href="@{|/tickets/${ticket.id}/aggiungi-nota|}">Aggiungi
+									nota</a>
+								<!--  elimina  -->
 
-							<form th:action="@{|/tickets/${ticket.id}/delete|}" method="post">
-								<button class="btn btn-danger" type="submit" id="submitButton"
-									th:data-confirm-delete="|Sei sicuro di voler cancellare il ticket?|"
-									th:onclick="if(!confirm(this.getAttribute('data-confirm-delete'))) return false">
-									Elimina
-								</button>
-							</form>
-
-						</td>
-					</tr>
-				</tbody>
-			</table>
+								<form th:action="@{|/tickets/${ticket.id}/delete|}" method="post">
+									<button class="btn btn-danger" type="submit" id="submitButton"
+										th:data-confirm-delete="|Sei sicuro di voler cancellare il ticket?|"
+										th:onclick="if(!confirm(this.getAttribute('data-confirm-delete'))) return false">
+										Elimina
+									</button>
+								</form>
+							</td>
+						</tr>
+					</tbody>
+				</table>
 		</div>
 		<div th:if="${ticketFiltered.isEmpty()}" th:text="|Non ci sono ticket con titolo ${titoloRicerca}.|"></div>
 		<div>

@@ -24,12 +24,13 @@
 			<input type="hidden" th:field="*{isAttivo}" id="flag-attivo">
 			<!-- username -->
 			<label for="username" class="form-label">Username</label>
-			<input type="text" th:field="*{username}" placeholder="Username" id="username" class="form-control">
+			<input type="text" th:field="*{username}" placeholder="Username" id="username" class="form-control"
+				required>
 
 
 			<!-- password -->
 			<label for="password" class="form-label">Nuova password</label>
-			<input type="text" class="form-control" id="password" th:field="*{password}"></input>
+			<input required type="text" class="form-control" id="password" th:field="*{password}"></input>
 
 			<!-- ruolo -->
 			<div sec:authorize="hasAuthority('ADMIN')">
@@ -42,7 +43,7 @@
 			<div sec:authorize="hasAuthority('USER')">
 				<input type="hidden" th:field="*{roles}" id="roles">
 			</div>
-			
+
 
 			<div th:if="${#fields.hasAnyErrors()}">
 				<ul class="list-group">

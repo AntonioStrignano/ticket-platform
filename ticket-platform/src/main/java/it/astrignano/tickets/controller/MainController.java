@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import it.astrignano.tickets.model.Role;
 import it.astrignano.tickets.model.Ticket;
@@ -33,8 +34,9 @@ public class MainController {
 
 	@Autowired
 	private UserRepository userRepo;
-	
-	@Autowired RoleRepository roleRepo;
+
+	@Autowired
+	RoleRepository roleRepo;
 
 	@GetMapping("")
 	public String landing(Model model, @AuthenticationPrincipal UserDetails currentUser) {
@@ -42,8 +44,8 @@ public class MainController {
 		User currUser = userRepo.findByUsername(currentUser.getUsername()).get();
 
 		model.addAttribute("currUser", currUser);
-		if(!currUser.getRoles().contains(roleRepo.getReferenceById(2))) {
-			return"redirect:/admin";
+		if (!currUser.getRoles().contains(roleRepo.getReferenceById(2))) {
+			return "redirect:/admin";
 		} else {
 			return "redirect:/user";
 		}
@@ -56,15 +58,12 @@ public class MainController {
 		model.addAttribute("tickets", ticketRepo.findAll());
 		model.addAttribute("utenti", userRepo.findAll());
 		Ticket byTitolo = new Ticket();
-		model.addAttribute("byTitolo", byTitolo );
-		
-		
 
 		return "/admin/dashboard";
 	}
 
-	@PostMapping("/admin/{titolo}")
-	public String ticketByTitolo(Model model, @PathVariable("titolo") String titolo) {
+	@GetMapping("/admin/search")
+	public String ticketByTitolo(Model model, @RequestParam("titolo") String titolo) {
 
 		List<Ticket> ticketFiltered = new ArrayList<Ticket>();
 		for (Ticket ticket : ticketRepo.findAll()) {
@@ -72,7 +71,7 @@ public class MainController {
 				ticketFiltered.add(ticket);
 			}
 		}
-
+		model.addAttribute("titolo", titolo);
 		model.addAttribute("ticketFiltered", ticketFiltered);
 
 		return "/admin/dashboard-ricerca";

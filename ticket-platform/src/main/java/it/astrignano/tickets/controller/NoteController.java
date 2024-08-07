@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import it.astrignano.tickets.model.Nota;
 import it.astrignano.tickets.model.Ticket;
 import it.astrignano.tickets.repository.NoteRepository;
-import it.astrignano.tickets.repository.TicketRepository;
 import jakarta.validation.Valid;
 
 @Controller
@@ -23,9 +22,6 @@ public class NoteController {
 	@Autowired
 	private NoteRepository noteRepo;
 	
-	@Autowired
-	private TicketRepository ticketRepo;
-
 //-----	CREATE
 
 	@PostMapping("/create")

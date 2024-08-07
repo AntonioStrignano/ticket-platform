@@ -77,8 +77,10 @@ public class TicketController {
 
 		List<User> userAttivi = new ArrayList<User>();
 		for (User user : userRepo.findAll()) {
-			if (user.getIsAttivo()) {
-				userAttivi.add(user);
+			if (user.getRoles().contains(roleRepo.getReferenceById(2))) {
+				if (user.getIsAttivo()) {
+					userAttivi.add(user);
+				}
 			}
 		}
 
@@ -162,6 +164,8 @@ public class TicketController {
 	public String updateStato(@Valid @ModelAttribute("ticket") Ticket statoTicket, @PathVariable("id") Integer id,
 			BindingResult bindingResult) {
 
+		
+		
 		if (bindingResult.hasErrors()) {
 			return "/ticket/show";
 		}

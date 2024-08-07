@@ -49,7 +49,12 @@
 				<li th:each="nota:${ticket.getNote}">
 					<div style="border: solid 1px;">
 						<p th:text="|Utente: ${nota.utente.username}|"></p>
+						<p th:text="|Data aggiunta: ${nota.dataCreazione} ${nota.oraCreazione}|"></p>						
+						<!-- 
 						<p th:text="|Data aggiunta: ${nota.dataCreazione}|"></p>
+							${#dates.format(${nota.dataCreazione},'dd/MM/YYYY')}
+							
+						-->
 						<p th:text='|"${nota.corpo}"|'></p>
 						<a class="btn btn-primary" th:href="@{|/note/edit/${nota.id}|}">Modifica</a>
 						<form method="post" id="delete-nota" th:action="@{|/note/${nota.id}/delete|}">

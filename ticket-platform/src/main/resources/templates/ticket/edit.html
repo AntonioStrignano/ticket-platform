@@ -19,12 +19,13 @@
 
 			<!-- titolo-->
 			<label for="titolo" class="form-label">Titolo ticket</label>
-			<input type="text" th:field="*{titolo}" placeholder="Titolo ticket" id="titolo-ticket" class="form-control">
+			<input required type="text" th:field="*{titolo}" placeholder="Titolo ticket" id="titolo-ticket"
+				class="form-control">
 
 
 			<!-- dettaglio -->
 			<label for="dettaglio" class="form-label">Dettaglio ticket</label>
-			<textarea class="form-control" id="dettaglio" rows="3" th:field="*{dettaglio}"></textarea>
+			<textarea required class="form-control" id="dettaglio" rows="3" th:field="*{dettaglio}"></textarea>
 			<br>
 			<!-- utente -->
 			<label for="utente" class="form-label">Operatore assegnato</label>
